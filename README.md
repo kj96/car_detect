@@ -1,4 +1,5 @@
 # Car detection
 
-Used Python OpenCV library.
-To detect cars in the image I used a pre-trained Classifier and draw box around it.
+Trained my own Linear SVM Classifier by extracting hog features of cars dataset.
+
+Trained classifier file : `mycarclassifier.pkl`
