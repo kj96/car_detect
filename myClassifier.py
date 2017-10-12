@@ -68,11 +68,9 @@ def draw_boxes(img, bboxes):
     return draw_img
 
 # Window size (x and y dimensions), and overlap fraction (for both x and y)
-def slide_window(img,
-                 x_start_stop=[None, None],
-                 y_start_stop=[None, None],
-                 xy_window=(64, 64),
-                 xy_overlap=(0.5, 0.5)):
+def slide_window(img,x_start_stop=[None, None], y_start_stop=[None, None],xy_window=(64, 64)):
+
+    xy_overlap=(0.65, 0.65)
     # calculate area of ROI
     xspan = x_start_stop[1] - x_start_stop[0]
     yspan = y_start_stop[1] - y_start_stop[0]
@@ -145,40 +143,40 @@ from scipy.ndimage.measurements import label
 
 image = mpimg.imread('D:/Online-compete/interview/test_images/q.jpg')
 
-def detect_car(image_to_process):
-    draw_image = np.copy(image_to_process)
+def detect_car(testCar):
+    draw_image = np.copy(testCar)
 
-    heat = np.zeros_like(image_to_process[:,:,0]).astype(np.float)
+    heat = np.zeros_like(testCar[:,:,0]).astype(np.float)
 
-    windows = slide_window(image_to_process, x_start_stop=[0, 1280], y_start_stop=[380, 680], xy_window=(128, 128), xy_overlap=(0.65, 0.65))
+    windows = slide_window(testCar, x_start_stop=[0, 1280], y_start_stop=[380, 680], xy_window=(128, 128))
 
-    hot_windows = search_windows(image_to_process, windows)
+    hot_windows = search_windows(testCar, windows)
     add_heat(heat, hot_windows)
 
-    windows = slide_window(image_to_process, x_start_stop=[0, 1280], y_start_stop=[390, 620], xy_window=(96, 96), xy_overlap=(0.65, 0.65))
+    windows = slide_window(testCar, x_start_stop=[0, 1280], y_start_stop=[390, 620], xy_window=(96, 96))
 
 
-    hot_windows = search_windows(image_to_process, windows)
+    hot_windows = search_windows(testCar, windows)
     add_heat(heat, hot_windows)
 
-    windows = slide_window(image_to_process,x_start_stop=[0, 1280], y_start_stop=[390, 560], xy_window=(72, 72),xy_overlap=(0.65, 0.65))
+    windows = slide_window(testCar,x_start_stop=[0, 1280], y_start_stop=[390, 560], xy_window=(72, 72))
 
-    hot_windows = search_windows(image_to_process, windows)
+    hot_windows = search_windows(testCar, windows)
     add_heat(heat, hot_windows)
 
 
-    windows = slide_window(image_to_process,x_start_stop=[0, 1280], y_start_stop=[390, 500], xy_window=(64, 64),xy_overlap=(0.65, 0.65))
+    windows = slide_window(testCar,x_start_stop=[0, 1280], y_start_stop=[390, 500], xy_window=(64, 64))
 
-    hot_windows = search_windows(image_to_process, windows)
+    hot_windows = search_windows(testCar, windows)
     add_heat(heat, hot_windows)
     heat = apply_threshold(heat, 2)
     heatmap = np.clip(heat, 0, 255)
     labels = label(heatmap)
     draw_labeled_bboxes(draw_image, labels)
 
-    return draw_image, heatmap, labels
+    return draw_image
 
-detected_car_image, detected_car_heatmap, detected_car_labales = detect_car(image)
+detected_car_image = detect_car(image)
 
 cv2.imwrite("as.png",detected_car_image)
 
